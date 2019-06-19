@@ -1,0 +1,4 @@
+[build]
+base = "budalapi/"
+publish = "budalapi/wwwroot/"
+command = "dotnet build"
