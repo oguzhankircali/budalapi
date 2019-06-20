@@ -2,19 +2,27 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Budalapi.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Budalapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    public class CountryController : Controller
     {
+        private readonly ICountryService _countryService;
+
+        public CountryController(ICountryService countryService)
+        {
+            _countryService = countryService;
+        }
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public async Task<IEnumerable<Country>> GetAllAsync()
         {
-            return new string[] { "value1", "value2" };
+            var retval = await _countryService.ListAsync();
+            return retval;
         }
 
         // GET api/values/5
