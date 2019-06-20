@@ -9,7 +9,7 @@ namespace Budalapi.Mapping
     {
         public ModelToResourceProfile()
         {
-            CreateMap<SaveCountryResource, Country>();
+            CreateMap<Country, CountryResource>();
         }
     }
 }
