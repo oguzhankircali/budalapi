@@ -1,7 +1,7 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace Budalapi
+namespace Budalapi.Domain.Models
 {
     public class City
     {

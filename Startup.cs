@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using AutoMapper;
 
 namespace Budalapi
 {
@@ -24,7 +25,9 @@ namespace Budalapi
         {
             services.AddDbContext<BudalapiContext>(options => options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddAutoMapper(typeof(Startup));
 
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ICountryRepository, CountryRepository>();
             services.AddScoped<ICountryService, CountryService>();
         }
@@ -43,6 +46,9 @@ namespace Budalapi
 
             app.UseHttpsRedirection();
             app.UseMvc();
+
+            string eName = env.EnvironmentName;
+            string aName = env.ApplicationName;
         }
     }
 }
