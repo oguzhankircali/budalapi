@@ -30,6 +30,12 @@ namespace Budalapi
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ICountryRepository, CountryRepository>();
             services.AddScoped<ICountryService, CountryService>();
+
+            services.AddScoped<ICityRepository, CityRepository>();
+            services.AddScoped<ICityService, CityService>();
+
+            services.AddScoped<IDistrictRepository, DistrictRepository>();
+            services.AddScoped<IDistrictService, DistrictService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

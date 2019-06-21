@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Budalapi.Domain.Models;
+using Budalapi.Domain.Resources;
 using Budalapi.Repositories;
 using Budalapi.Services.Communication;
 
@@ -11,12 +13,21 @@ namespace Budalapi.Services
     public class CountryService : ICountryService
     {
         private readonly ICountryRepository _countryRepository;
+        private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
 
-        public CountryService(ICountryRepository countryRepository, IUnitOfWork unitOfWork)
+        public CountryService(ICountryRepository countryRepository, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _countryRepository = countryRepository;
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
+        }
+
+        public async Task<CountryResource> GetAsync(int countryId)
+        {
+            var data = await _countryRepository.FindByIdAsync(countryId);
+            var retval = _mapper.Map<Country, CountryResource>(data);
+            return retval;
         }
         public async Task<IEnumerable<Country>> ListAsync()
         {

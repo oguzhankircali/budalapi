@@ -13,22 +13,22 @@ namespace Budalapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CountryController : Controller
+    public class DistrictController : Controller
     {
-        private readonly ICountryService _countryService;
+        private readonly IDistrictService _districtService;
         private readonly IMapper _mapper;
 
-        public CountryController(ICountryService countryService, IMapper mapper)
+        public DistrictController(IDistrictService districtService, IMapper mapper)
         {
-            _countryService = countryService;
+            _districtService = districtService;
             _mapper = mapper;
         }
         // GET api/values
         [HttpGet]
-        public async Task<IEnumerable<CountryResource>> GetAllAsync()
+        public async Task<IEnumerable<DistrictResource>> GetAllAsync()
         {
-            var retval = await _countryService.ListAsync();
-            var resources = _mapper.Map<IEnumerable<Country>, IEnumerable<CountryResource>>(retval);
+            var retval = await _districtService.ListAsync();
+            var resources = _mapper.Map<IEnumerable<District>, IEnumerable<DistrictResource>>(retval);
             return resources;
         }
 
@@ -36,28 +36,28 @@ namespace Budalapi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var retval = await _countryService.GetAsync(id);
+            var retval = await _districtService.GetAsync(id);
             return Ok(retval);
         }
 
         // POST api/values
         [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody] SaveCountryResource resource)
+        public async Task<IActionResult> PostAsync([FromBody] SaveDistrictResource resource)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState.GetErrorMessages());
             }
 
-            var category = _mapper.Map<SaveCountryResource, Country>(resource);
-            var result = await _countryService.SaveAsync(category);
+            var data = _mapper.Map<SaveDistrictResource, District>(resource);
+            var result = await _districtService.SaveAsync(data);
 
             if (!result.Success)
             {
                 return BadRequest(result.Message);
             }
 
-            var itemResource = _mapper.Map<Country, CountryResource>(result.Country);
+            var itemResource = _mapper.Map<District, DistrictResource>(result.District);
             return Ok(itemResource);
         }
 

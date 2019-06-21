@@ -1,0 +1,17 @@
+
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Budalapi.Domain.Models;
+using Budalapi.Domain.Resources;
+using Budalapi.Services.Communication;
+
+namespace Budalapi.Services
+{
+    public interface ICityService
+    {
+        Task<CityResource> GetAsync(int countryId);
+        Task<IEnumerable<City>> ListAsync();
+        Task<SaveCityResponse> SaveAsync(City category);
+        Task<SaveCityResponse> UpdateAsync(int id, City category);
+    }
+}
