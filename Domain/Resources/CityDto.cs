@@ -1,6 +1,6 @@
 namespace Budalapi.Domain.Resources
 {
-    public class DistrictResource
+    public class CityDto
     {
         public int Id { get; set; }
         public string Name { get; set; }

@@ -9,7 +9,7 @@ namespace Budalapi.Services
 {
     public interface ICityService
     {
-        Task<CityResource> GetAsync(int countryId);
+        Task<City> GetAsync(int countryId);
         Task<IEnumerable<City>> ListAsync();
         Task<SaveCityResponse> SaveAsync(City category);
         Task<SaveCityResponse> UpdateAsync(int id, City category);

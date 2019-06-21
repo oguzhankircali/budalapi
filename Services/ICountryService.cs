@@ -9,9 +9,10 @@ namespace Budalapi.Services
 {
     public interface ICountryService
     {
-        Task<CountryResource> GetAsync(int countryId);
+        Task<Country> GetAsync(int countryId);
         Task<IEnumerable<Country>> ListAsync();
-        Task<SaveCountryResponse> SaveAsync(Country category);
-        Task<SaveCountryResponse> UpdateAsync(int id, Country category);
+        Task<SaveCountryResponse> SaveAsync(Country item);
+        Task<SaveCountryResponse> UpdateAsync(int id, Country item);
+        Task DeleteAsync(int id);
     }
 }

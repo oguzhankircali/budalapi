@@ -23,11 +23,9 @@ namespace Budalapi.Services
             _mapper = mapper;
         }
 
-        public async Task<CountryResource> GetAsync(int countryId)
+        public async Task<Country> GetAsync(int countryId)
         {
-            var data = await _countryRepository.FindByIdAsync(countryId);
-            var retval = _mapper.Map<Country, CountryResource>(data);
-            return retval;
+            return await _countryRepository.FindByIdAsync(countryId);
         }
         public async Task<IEnumerable<Country>> ListAsync()
         {
@@ -71,6 +69,11 @@ namespace Budalapi.Services
             {
                 return new SaveCountryResponse("An error occurred when updating the category: " + ex.Message);
             }
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            await _countryRepository.Delete(id);
         }
     }
 }

@@ -23,11 +23,9 @@ namespace Budalapi.Services
             _mapper = mapper;
         }
 
-        public async Task<CityResource> GetAsync(int countryId)
+        public async Task<City> GetAsync(int countryId)
         {
-            var data = await _countryRepository.FindByIdAsync(countryId);
-            var retval = _mapper.Map<City, CityResource>(data);
-            return retval;
+            return await _countryRepository.FindByIdAsync(countryId);
         }
         public async Task<IEnumerable<City>> ListAsync()
         {

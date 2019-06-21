@@ -25,52 +25,67 @@ namespace Budalapi.Controllers
         }
         // GET api/values
         [HttpGet]
-        public async Task<IEnumerable<CountryResource>> GetAllAsync()
+        public async Task<IActionResult> GetAllAsync()
         {
-            var retval = await _countryService.ListAsync();
-            var resources = _mapper.Map<IEnumerable<Country>, IEnumerable<CountryResource>>(retval);
-            return resources;
+            var data = await _countryService.ListAsync();
+            var retval = _mapper.Map<IEnumerable<Country>, IEnumerable<CountryDto>>(data);
+            return Ok(retval);
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var retval = await _countryService.GetAsync(id);
+            var data = await _countryService.GetAsync(id);
+            var retval = _mapper.Map<Country, CountryDto>(data);
             return Ok(retval);
         }
 
         // POST api/values
         [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody] SaveCountryResource resource)
+        public async Task<IActionResult> PostAsync([FromBody] SaveCountryDto resource)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState.GetErrorMessages());
             }
 
-            var category = _mapper.Map<SaveCountryResource, Country>(resource);
-            var result = await _countryService.SaveAsync(category);
+            var data = _mapper.Map<SaveCountryDto, Country>(resource);
+            var result = await _countryService.SaveAsync(data);
 
             if (!result.Success)
             {
                 return BadRequest(result.Message);
             }
 
-            var itemResource = _mapper.Map<Country, CountryResource>(result.Country);
+            var itemResource = _mapper.Map<Country, CountryDto>(result.Country);
             return Ok(itemResource);
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, [FromBody] SaveCountryDto dto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState.GetErrorMessages());
+            }
+
+            var existData = await _countryService.GetAsync(id);
+            if (existData != null)
+            {
+                existData.Name = dto.Name;
+            }
+
+            var response = await _countryService.UpdateAsync(id, existData);
+            return Ok(response);
         }
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
+            await _countryService.DeleteAsync(id);
         }
     }
 }

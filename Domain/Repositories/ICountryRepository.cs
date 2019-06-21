@@ -12,5 +12,6 @@ namespace Budalapi.Repositories
         Task AddAsync(Country item);
         Task<Country> FindByIdAsync(int id);
         void Update(Country item);
+        Task Delete(int id);
     }
 }

@@ -13,6 +13,7 @@ namespace Budalapi.Repositories
         {
 
         }
+
         public async Task<IEnumerable<City>> ListAsync()
         {
             return await _context.City.ToListAsync();

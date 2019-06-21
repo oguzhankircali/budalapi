@@ -32,5 +32,11 @@ namespace Budalapi.Repositories
         {
             _context.Country.Update(item);
         }
+
+        public async Task Delete(int id)
+        {
+            var item = await _context.Country.FindAsync(id);
+            _context.Country.Remove(item);
+        }
     }
 }

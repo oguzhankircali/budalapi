@@ -25,10 +25,10 @@ namespace Budalapi.Controllers
         }
         // GET api/values
         [HttpGet]
-        public async Task<IEnumerable<CityResource>> GetAllAsync()
+        public async Task<IEnumerable<CityDto>> GetAllAsync()
         {
             var retval = await _cityService.ListAsync();
-            var resources = _mapper.Map<IEnumerable<City>, IEnumerable<CityResource>>(retval);
+            var resources = _mapper.Map<IEnumerable<City>, IEnumerable<CityDto>>(retval);
             return resources;
         }
 
@@ -42,14 +42,14 @@ namespace Budalapi.Controllers
 
         // POST api/values
         [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody] SaveCityResource resource)
+        public async Task<IActionResult> PostAsync([FromBody] SaveCityDto resource)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState.GetErrorMessages());
             }
 
-            var category = _mapper.Map<SaveCityResource, City>(resource);
+            var category = _mapper.Map<SaveCityDto, City>(resource);
             var result = await _cityService.SaveAsync(category);
 
             if (!result.Success)
@@ -57,7 +57,7 @@ namespace Budalapi.Controllers
                 return BadRequest(result.Message);
             }
 
-            var itemResource = _mapper.Map<City, CityResource>(result.City);
+            var itemResource = _mapper.Map<City, CityDto>(result.City);
             return Ok(itemResource);
         }
 

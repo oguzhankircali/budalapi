@@ -25,10 +25,10 @@ namespace Budalapi.Controllers
         }
         // GET api/values
         [HttpGet]
-        public async Task<IEnumerable<DistrictResource>> GetAllAsync()
+        public async Task<IEnumerable<DistrictDto>> GetAllAsync()
         {
             var retval = await _districtService.ListAsync();
-            var resources = _mapper.Map<IEnumerable<District>, IEnumerable<DistrictResource>>(retval);
+            var resources = _mapper.Map<IEnumerable<District>, IEnumerable<DistrictDto>>(retval);
             return resources;
         }
 
@@ -42,14 +42,14 @@ namespace Budalapi.Controllers
 
         // POST api/values
         [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody] SaveDistrictResource resource)
+        public async Task<IActionResult> PostAsync([FromBody] SaveDistrictDto resource)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState.GetErrorMessages());
             }
 
-            var data = _mapper.Map<SaveDistrictResource, District>(resource);
+            var data = _mapper.Map<SaveDistrictDto, District>(resource);
             var result = await _districtService.SaveAsync(data);
 
             if (!result.Success)
@@ -57,7 +57,7 @@ namespace Budalapi.Controllers
                 return BadRequest(result.Message);
             }
 
-            var itemResource = _mapper.Map<District, DistrictResource>(result.District);
+            var itemResource = _mapper.Map<District, DistrictDto>(result.District);
             return Ok(itemResource);
         }
 

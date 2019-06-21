@@ -1,6 +1,6 @@
-namespace Budalapi.Domain.Resources
+﻿namespace Budalapi.Domain.Resources
 {
-    public class CountryResource
+    public class CountryDto
     {
         public int Id { get; set; }
         public string Name { get; set; }
