@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Budalapi.Migrations
+namespace budalapi.Migrations
 {
     [DbContext(typeof(BudalapiContext))]
-    [Migration("20190620133200_CreateDatabase")]
-    partial class CreateDatabase
+    [Migration("20190624113027_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -17,7 +17,7 @@ namespace Budalapi.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.2.4-servicing-10062");
 
-            modelBuilder.Entity("Budalapi.City", b =>
+            modelBuilder.Entity("Budalapi.Domain.Models.City", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -29,19 +29,21 @@ namespace Budalapi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CountryId");
+
                     b.ToTable("City");
                 });
 
-            modelBuilder.Entity("Budalapi.Country", b =>
+            modelBuilder.Entity("Budalapi.Domain.Models.Country", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ISO1366_Alpha2")
+                    b.Property<string>("ISO1366")
                         .HasMaxLength(3);
 
                     b.Property<string>("Name")
-                        .HasMaxLength(11);
+                        .HasMaxLength(100);
 
                     b.Property<int>("PhoneCode");
 
@@ -50,7 +52,7 @@ namespace Budalapi.Migrations
                     b.ToTable("Country");
                 });
 
-            modelBuilder.Entity("Budalapi.District", b =>
+            modelBuilder.Entity("Budalapi.Domain.Models.District", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -62,7 +64,25 @@ namespace Budalapi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CityId");
+
                     b.ToTable("District");
+                });
+
+            modelBuilder.Entity("Budalapi.Domain.Models.City", b =>
+                {
+                    b.HasOne("Budalapi.Domain.Models.Country", "Country")
+                        .WithMany("Cities")
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Budalapi.Domain.Models.District", b =>
+                {
+                    b.HasOne("Budalapi.Domain.Models.City", "City")
+                        .WithMany("Districts")
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }
