@@ -16,11 +16,13 @@ namespace Budalapi.Controllers
     public class CityController : Controller
     {
         private readonly ICityService _cityService;
+        private readonly IDistrictService _districtService;
         private readonly IMapper _mapper;
 
-        public CityController(ICityService cityService, IMapper mapper)
+        public CityController(ICityService cityService, IDistrictService districtService, IMapper mapper)
         {
             _cityService = cityService;
+            _districtService = districtService;
             _mapper = mapper;
         }
         // GET api/values
@@ -71,6 +73,15 @@ namespace Budalapi.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+        }
+
+        [Route("{id}/Districts")]
+        public async Task<IActionResult> Districts(int id)
+        {
+            var data = await _districtService.ListByCityIdAsync(id);
+            var retval = _mapper.Map<IEnumerable<District>, IEnumerable<DistrictDto>>(data);
+            return Ok(retval);
+
         }
     }
 }

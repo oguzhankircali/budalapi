@@ -12,5 +12,6 @@ namespace Budalapi.Repositories
         Task AddAsync(District item);
         Task<District> FindByIdAsync(int id);
         void Update(District item);
+        Task<IEnumerable<District>> ListByCityIdAsync(int countryId);
     }
 }

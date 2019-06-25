@@ -32,6 +32,11 @@ namespace Budalapi.Services
             return await _districtRepository.ListAsync();
         }
 
+        public async Task<IEnumerable<District>> ListByCityIdAsync(int cityId)
+        {
+            return await _districtRepository.ListByCityIdAsync(cityId);
+        }
+
         public async Task<SaveDistrictResponse> SaveAsync(District category)
         {
             try

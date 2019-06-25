@@ -13,5 +13,7 @@ namespace Budalapi.Services
         Task<IEnumerable<District>> ListAsync();
         Task<SaveDistrictResponse> SaveAsync(District category);
         Task<SaveDistrictResponse> UpdateAsync(int id, District category);
+
+        Task<IEnumerable<District>> ListByCityIdAsync(int cityId);
     }
 }

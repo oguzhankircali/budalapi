@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Budalapi.Domain.Resources
 {
     public class CityDto

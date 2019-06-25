@@ -1,5 +1,6 @@
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Budalapi.Domain.Models;
 using Budalapi.Persistence.Contexts;
@@ -31,6 +32,11 @@ namespace Budalapi.Repositories
         public void Update(District item)
         {
             _context.District.Update(item);
+        }
+
+        public async Task<IEnumerable<District>> ListByCityIdAsync(int cityId)
+        {
+            return await _context.District.Where(p => p.CityId == cityId).ToListAsync();
         }
     }
 }
