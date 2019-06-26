@@ -13,26 +13,17 @@ namespace Budalapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CountryController : Controller
+    public class CountriesController : Controller
     {
         private readonly ICountryService _countryService;
         private readonly IMapper _mapper;
 
-        public CountryController(ICountryService countryService, IMapper mapper)
+        public CountriesController(ICountryService countryService, IMapper mapper)
         {
             _countryService = countryService;
             _mapper = mapper;
         }
-        // GET api/values
-        [HttpGet]
-        public async Task<IActionResult> GetAllAsync()
-        {
-            var data = await _countryService.ListAsync();
-            var retval = _mapper.Map<IEnumerable<Country>, IEnumerable<CountryDto>>(data);
-            return Ok(retval);
-        }
-
-        // GET api/values/5
+        // GET api/countries/5
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
@@ -41,7 +32,17 @@ namespace Budalapi.Controllers
             return Ok(retval);
         }
 
-        // POST api/values
+        // GET api/countries
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            var data = await _countryService.ListAsync();
+            var retval = _mapper.Map<IEnumerable<Country>, IEnumerable<CountryDto>>(data);
+            return Ok(retval);
+        }
+
+
+        // POST api/countries
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromBody] SaveCountryDto resource)
         {
@@ -62,7 +63,7 @@ namespace Budalapi.Controllers
             return Ok(itemResource);
         }
 
-        // PUT api/values/5
+        // PUT api/countries/5
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] SaveCountryDto dto)
         {
@@ -81,7 +82,7 @@ namespace Budalapi.Controllers
             return Ok(response);
         }
 
-        // DELETE api/values/5
+        // DELETE api/countries/5
         [HttpDelete("{id}")]
         public async Task Delete(int id)
         {

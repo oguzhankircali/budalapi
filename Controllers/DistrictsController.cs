@@ -13,32 +13,41 @@ namespace Budalapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DistrictController : Controller
+    public class DistrictsController : Controller
     {
         private readonly IDistrictService _districtService;
         private readonly IMapper _mapper;
 
-        public DistrictController(IDistrictService districtService, IMapper mapper)
+        public DistrictsController(IDistrictService districtService, IMapper mapper)
         {
             _districtService = districtService;
             _mapper = mapper;
         }
-        // GET api/values
+        // GET api/districts/5
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            var data = await _districtService.GetAsync(id);
+            return Ok(_mapper.Map<District, DistrictDto>(data));
+        }
+
+        // GET api/districts
         [HttpGet]
-        public async Task<IEnumerable<DistrictDto>> GetAllAsync()
+        public async Task<IEnumerable<DistrictDto>> Get()
         {
             var retval = await _districtService.ListAsync();
             var resources = _mapper.Map<IEnumerable<District>, IEnumerable<DistrictDto>>(retval);
             return resources;
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        [HttpGet("GetAllByCityId/{cityId}")]
+        public async Task<IActionResult> GetAllByCityId(int cityId)
         {
-            var retval = await _districtService.GetAsync(id);
-            return Ok(retval);
+            var retval = await _districtService.ListByCityIdAsync(cityId);
+            var resources = _mapper.Map<IEnumerable<District>, IEnumerable<DistrictDto>>(retval);
+            return Ok(resources);
         }
+
 
         // POST api/values
         [HttpPost]

@@ -8,7 +8,6 @@ namespace Budalapi.Repositories
     public interface ICountryRepository
     {
         Task<IEnumerable<Country>> ListAsync();
-
         Task AddAsync(Country item);
         Task<Country> FindByIdAsync(int id);
         void Update(Country item);

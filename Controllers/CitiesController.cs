@@ -13,36 +13,44 @@ namespace Budalapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CityController : Controller
+    public class CitiesController : Controller
     {
         private readonly ICityService _cityService;
         private readonly IDistrictService _districtService;
         private readonly IMapper _mapper;
 
-        public CityController(ICityService cityService, IDistrictService districtService, IMapper mapper)
+        public CitiesController(ICityService cityService, IDistrictService districtService, IMapper mapper)
         {
             _cityService = cityService;
             _districtService = districtService;
             _mapper = mapper;
         }
-        // GET api/values
-        [HttpGet]
-        public async Task<IEnumerable<CityDto>> GetAllAsync()
-        {
-            var retval = await _cityService.ListAsync();
-            var resources = _mapper.Map<IEnumerable<City>, IEnumerable<CityDto>>(retval);
-            return resources;
-        }
-
-        // GET api/values/5
+        // GET api/cities/5
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
             var retval = await _cityService.GetAsync(id);
-            return Ok(retval);
+            return Ok(_mapper.Map<City, CityDto>(retval));
         }
 
-        // POST api/values
+        // GET api/cities
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            var retval = await _cityService.ListAsync();
+            var resources = _mapper.Map<IEnumerable<City>, IEnumerable<CityDto>>(retval);
+            return Ok(resources);
+        }
+
+        [Route("GetAllByCountryId/{countryId}")]
+        public async Task<IActionResult> GetAllByCountryId(int countryId)
+        {
+            var data = await _cityService.ListByCountryIdAsync(countryId);
+            return Ok(_mapper.Map<IEnumerable<City>, IEnumerable<CityDto>>(data));
+        }
+
+
+        // POST api/cities
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromBody] SaveCityDto resource)
         {
@@ -63,25 +71,16 @@ namespace Budalapi.Controllers
             return Ok(itemResource);
         }
 
-        // PUT api/values/5
+        // PUT api/cities/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
         }
 
-        // DELETE api/values/5
+        // DELETE api/cities/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-        }
-
-        [Route("{id}/Districts")]
-        public async Task<IActionResult> Districts(int id)
-        {
-            var data = await _districtService.ListByCityIdAsync(id);
-            var retval = _mapper.Map<IEnumerable<District>, IEnumerable<DistrictDto>>(data);
-            return Ok(retval);
-
         }
     }
 }
