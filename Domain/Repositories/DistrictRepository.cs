@@ -38,5 +38,12 @@ namespace Budalapi.Repositories
         {
             return await _context.District.Where(p => p.CityId == cityId).ToListAsync();
         }
+
+        public async Task Delete(int id)
+        {
+            var item = await _context.District.FindAsync(id);
+            _context.District.Remove(item);
+            await _context.SaveChangesAsync();
+        }
     }
 }

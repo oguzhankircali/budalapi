@@ -44,14 +44,14 @@ namespace Budalapi.Controllers
 
         // POST api/countries
         [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody] SaveCountryDto resource)
+        public async Task<IActionResult> PostAsync([FromBody] SaveCountryModel resource)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState.GetErrorMessages());
             }
 
-            var data = _mapper.Map<SaveCountryDto, Country>(resource);
+            var data = _mapper.Map<SaveCountryModel, Country>(resource);
             var result = await _countryService.SaveAsync(data);
 
             if (!result.Success)
@@ -65,8 +65,13 @@ namespace Budalapi.Controllers
 
         // PUT api/countries/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] SaveCountryDto dto)
+        public async Task<IActionResult> Put(int id, [FromBody] SaveCountryModel model)
         {
+            if (model is null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState.GetErrorMessages());
@@ -75,7 +80,7 @@ namespace Budalapi.Controllers
             var existData = await _countryService.GetAsync(id);
             if (existData != null)
             {
-                existData.Name = dto.Name;
+                existData.Name = model.Name;
             }
 
             var response = await _countryService.UpdateAsync(id, existData);

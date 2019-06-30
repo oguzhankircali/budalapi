@@ -10,10 +10,13 @@ namespace Budalapi.Mapping
         public ModelToResourceProfile()
         {
             CreateMap<Country, CountryDto>();
-            CreateMap<Country, SaveCountryDto>();
+            CreateMap<Country, SaveCountryModel>();
 
             CreateMap<City, CityDto>();
+            CreateMap<City, SaveCityModel>();
+
             CreateMap<District, DistrictDto>();
+            CreateMap<District, SaveDistrictModel>();
         }
     }
 }

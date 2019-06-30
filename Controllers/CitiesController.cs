@@ -52,14 +52,14 @@ namespace Budalapi.Controllers
 
         // POST api/cities
         [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody] SaveCityDto resource)
+        public async Task<IActionResult> PostAsync([FromBody] SaveCityModel resource)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState.GetErrorMessages());
             }
 
-            var category = _mapper.Map<SaveCityDto, City>(resource);
+            var category = _mapper.Map<SaveCityModel, City>(resource);
             var result = await _cityService.SaveAsync(category);
 
             if (!result.Success)
@@ -73,8 +73,21 @@ namespace Budalapi.Controllers
 
         // PUT api/cities/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, [FromBody] SaveCityModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState.GetErrorMessages());
+            }
+
+            var existData = await _cityService.GetAsync(id);
+            if (existData != null)
+            {
+                existData.Name = model.Name;
+            }
+
+            var response = await _cityService.UpdateAsync(id, existData);
+            return Ok(response);
         }
 
         // DELETE api/cities/5

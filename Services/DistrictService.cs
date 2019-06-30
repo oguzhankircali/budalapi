@@ -75,5 +75,10 @@ namespace Budalapi.Services
                 return new SaveDistrictResponse("An error occurred when updating the category: " + ex.Message);
             }
         }
+
+        public async Task DeleteAsync(int id)
+        {
+            await _districtRepository.Delete(id);
+        }
     }
 }

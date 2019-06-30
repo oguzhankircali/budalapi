@@ -51,14 +51,14 @@ namespace Budalapi.Controllers
 
         // POST api/values
         [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody] SaveDistrictDto resource)
+        public async Task<IActionResult> PostAsync([FromBody] SaveDistrictModel resource)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState.GetErrorMessages());
             }
 
-            var data = _mapper.Map<SaveDistrictDto, District>(resource);
+            var data = _mapper.Map<SaveDistrictModel, District>(resource);
             var result = await _districtService.SaveAsync(data);
 
             if (!result.Success)
@@ -72,14 +72,29 @@ namespace Budalapi.Controllers
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, [FromBody] SaveDistrictModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState.GetErrorMessages());
+            }
+
+            var existData = await _districtService.GetAsync(id);
+            if (existData != null)
+            {
+                existData.Name = model.Name;
+            }
+
+            var response = await _districtService.UpdateAsync(id, existData);
+            return Ok(response);
         }
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            await _districtService.DeleteAsync(id);
+            return Ok("Deleted.");
         }
     }
 }
