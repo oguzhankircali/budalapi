@@ -13,6 +13,6 @@ namespace Budalapi.Services
         Task<IEnumerable<Country>> ListAsync();
         Task<SaveCountryResponse> SaveAsync(Country item);
         Task<SaveCountryResponse> UpdateAsync(int id, Country item);
-        Task DeleteAsync(int id);
+        Task<SaveCountryResponse> DeleteAsync(int id);
     }
 }

@@ -71,9 +71,10 @@ namespace Budalapi.Services
             }
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task<SaveCountryResponse> DeleteAsync(int id)
         {
             await _countryRepository.Delete(id);
+            return new SaveCountryResponse($"The district with {id}, has been removed.");
         }
     }
 }

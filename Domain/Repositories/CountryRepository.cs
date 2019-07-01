@@ -37,6 +37,7 @@ namespace Budalapi.Repositories
         {
             var item = await _context.Country.FindAsync(id);
             _context.Country.Remove(item);
+            await _context.SaveChangesAsync();
         }
     }
 }

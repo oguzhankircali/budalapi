@@ -7,6 +7,7 @@ using Budalapi.Domain.Models;
 using Budalapi.Domain.Resources;
 using Budalapi.Repositories;
 using Budalapi.Services.Communication;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Budalapi.Services
 {
@@ -76,9 +77,10 @@ namespace Budalapi.Services
             }
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task<SaveDistrictResponse> DeleteAsync(int id)
         {
             await _districtRepository.Delete(id);
+            return new SaveDistrictResponse($"The district with {id}, has been removed.");
         }
     }
 }

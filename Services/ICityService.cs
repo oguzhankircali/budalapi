@@ -14,5 +14,6 @@ namespace Budalapi.Services
         Task<SaveCityResponse> SaveAsync(City category);
         Task<SaveCityResponse> UpdateAsync(int id, City category);
         Task<IEnumerable<City>> ListByCountryIdAsync(int countryId);
+        Task<SaveCityResponse> DeleteAsync(int id);
     }
 }
