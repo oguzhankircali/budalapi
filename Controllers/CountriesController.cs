@@ -28,6 +28,11 @@ namespace Budalapi.Controllers
         public async Task<IActionResult> Get(int id)
         {
             var data = await _countryService.GetAsync(id);
+            if (data == null)
+            {
+                return NotFound();
+            }
+
             var retval = _mapper.Map<Country, CountryDto>(data);
             return Ok(retval);
         }
@@ -67,31 +72,47 @@ namespace Budalapi.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] SaveCountryModel model)
         {
-            if (model is null)
+            try
             {
-                throw new ArgumentNullException(nameof(model));
-            }
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
 
-            if (!ModelState.IsValid)
+                var existData = await _countryService.GetAsync(id);
+                if (existData != null)
+                {
+                    existData.Name = model.Name;
+                }
+
+                await _countryService.UpdateAsync(id, existData);
+                return NoContent();
+            }
+            catch (Exception ex)
             {
-                return BadRequest(ModelState.GetErrorMessages());
+                return StatusCode(500, "Internal server error: " + ex.Message);
             }
-
-            var existData = await _countryService.GetAsync(id);
-            if (existData != null)
-            {
-                existData.Name = model.Name;
-            }
-
-            var response = await _countryService.UpdateAsync(id, existData);
-            return Ok(response);
         }
 
         // DELETE api/countries/5
         [HttpDelete("{id}")]
-        public async Task Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            await _countryService.DeleteAsync(id);
+            try
+            {
+                Country country = await _countryService.GetAsync(id);
+                if (country == null)
+                {
+                    return NotFound("Country is not found!");
+                }
+
+                await _countryService.DeleteAsync(country.Id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
         }
     }
 }

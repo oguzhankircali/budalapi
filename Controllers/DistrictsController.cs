@@ -8,6 +8,8 @@ using Budalapi.Domain.Resources;
 using Budalapi.Services;
 using Microsoft.AspNetCore.Mvc;
 using Budalapi.Extensions;
+using Budalapi.Services.Communication;
+using Microsoft.AspNetCore.Http;
 
 namespace Budalapi.Controllers
 {
@@ -28,6 +30,11 @@ namespace Budalapi.Controllers
         public async Task<IActionResult> Get(int id)
         {
             var data = await _districtService.GetAsync(id);
+            if (data == null)
+            {
+                return NotFound();
+            }
+
             return Ok(_mapper.Map<District, DistrictDto>(data));
         }
 
@@ -50,51 +57,79 @@ namespace Budalapi.Controllers
 
 
         // POST api/values
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromBody] SaveDistrictModel resource)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState.GetErrorMessages());
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var data = _mapper.Map<SaveDistrictModel, District>(resource);
+                var result = await _districtService.SaveAsync(data);
+
+                if (!result.Success)
+                {
+                    return BadRequest(result.Message);
+                }
+
+                var itemResource = _mapper.Map<District, DistrictDto>(result.District);
+                return Ok(itemResource);
             }
-
-            var data = _mapper.Map<SaveDistrictModel, District>(resource);
-            var result = await _districtService.SaveAsync(data);
-
-            if (!result.Success)
+            catch (System.Exception ex)
             {
-                return BadRequest(result.Message);
+                return StatusCode(500, "Internal server error: " + ex.Message);
             }
-
-            var itemResource = _mapper.Map<District, DistrictDto>(result.District);
-            return Ok(itemResource);
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] SaveDistrictModel model)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState.GetErrorMessages());
-            }
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState.GetErrorMessages());
+                }
 
-            var existData = await _districtService.GetAsync(id);
-            if (existData != null)
+                var existData = await _districtService.GetAsync(id);
+                if (existData != null)
+                {
+                    existData.Name = model.Name;
+                }
+
+                await _districtService.UpdateAsync(id, existData);
+                return NoContent();
+            }
+            catch (Exception ex)
             {
-                existData.Name = model.Name;
+                return StatusCode(500, "Internal server error: " + ex.Message);
             }
-
-            var response = await _districtService.UpdateAsync(id, existData);
-            return Ok(response);
         }
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _districtService.DeleteAsync(id);
-            return Ok("Deleted.");
+            try
+            {
+                District district = await _districtService.GetAsync(id);
+                if (district == null)
+                {
+                    return NotFound("District is not found!");
+                }
+
+                await _districtService.DeleteAsync(district.Id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
         }
     }
 }

@@ -11,5 +11,10 @@ namespace Budalapi.Services.Communication
             Success = success;
             Message = message;
         }
+
+        public BaseResponse(bool success)
+        {
+            Success = success;
+        }
     }
 }

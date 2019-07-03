@@ -8,6 +8,7 @@ using Budalapi.Domain.Resources;
 using Budalapi.Services;
 using Microsoft.AspNetCore.Mvc;
 using Budalapi.Extensions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Budalapi.Controllers
 {
@@ -27,9 +28,16 @@ namespace Budalapi.Controllers
         }
         // GET api/cities/5
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> Get(int id)
         {
             var retval = await _cityService.GetAsync(id);
+
+            if(retval == null)
+            {
+                return NotFound();
+            }
+
             return Ok(_mapper.Map<City, CityDto>(retval));
         }
 
@@ -75,25 +83,47 @@ namespace Budalapi.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] SaveCityModel model)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState.GetErrorMessages());
-            }
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState.GetErrorMessages());
+                }
 
-            var existData = await _cityService.GetAsync(id);
-            if (existData != null)
+                var existData = await _cityService.GetAsync(id);
+                if (existData != null)
+                {
+                    existData.Name = model.Name;
+                }
+
+                var response = await _cityService.UpdateAsync(id, existData);
+                return NoContent();
+            }
+            catch (Exception ex)
             {
-                existData.Name = model.Name;
+                return StatusCode(500, "Internal server error: " + ex.Message);
             }
-
-            var response = await _cityService.UpdateAsync(id, existData);
-            return Ok(response);
         }
 
         // DELETE api/cities/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            try
+            {
+                City city = await _cityService.GetAsync(id);
+                if (city == null)
+                {
+                    return NotFound("City is not found!");
+                }
+
+                await _cityService.DeleteAsync(city.Id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
         }
     }
 }
