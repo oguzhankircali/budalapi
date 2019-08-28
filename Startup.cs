@@ -11,6 +11,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.IO;
 
 namespace Budalapi
 {
@@ -75,6 +76,15 @@ namespace Budalapi
 
             string eName = env.EnvironmentName;
             string aName = env.ApplicationName;
+
+            var host = new WebHostBuilder()
+            .UseKestrel()
+            .UseContentRoot(Directory.GetCurrentDirectory())
+            .UseIISIntegration()
+            .UseStartup("Budalapi")
+            .Build();
+
+        host.Run();
         }
     }
 }
