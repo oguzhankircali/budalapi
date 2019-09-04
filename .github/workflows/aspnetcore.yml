@@ -1,4 +1,4 @@
-name: ASP.NET Core CI
+name: Budalapi Pipeline
 
 on: [push]
 
@@ -13,5 +13,5 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 2.2.108
-    - name: Build with dotnet on GitHub Actions
+    - name: Build Budalapi with dotnet on GitHub Actions
       run: dotnet build --configuration Release
