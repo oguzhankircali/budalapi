@@ -1,10 +1,15 @@
 using System;
-using System.IdentityModel.Tokens.Jwt;
+// using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authentication;
+//using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
+// using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Identity;
+//using Microsoft.AspNetCore.Authentication;
+
 
 namespace Budalapi.Controllers
 {
@@ -23,24 +28,24 @@ namespace Budalapi.Controllers
                     return Unauthorized();
                 }
 
-                var claims = new[]
-                {
-                    new Claim(JwtRegisteredClaimNames.Sub, request.UserName),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-                };
+                // var claims = new[]
+                // {
+                //     new Claim(JwtRegisteredClaimNames.Sub, request.UserName),
+                //     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                // };
 
-                var token = new JwtSecurityToken
-                (
-                    issuer: "", //_configuration["Issuer"], //appsettings.json içerisinde bulunan issuer değeri
-                    audience: "", //_configuration["Audience"],//appsettings.json içerisinde bulunan audince değeri
-                    claims: claims,
-                    expires: DateTime.UtcNow.AddDays(30), // 30 gün geçerli olacak
-                    notBefore: DateTime.UtcNow,
-                    signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("")), //_configuration["SigningKey"])),//appsettings.json içerisinde bulunan signingkey değeri
-                            SecurityAlgorithms.HmacSha256)
-                );
-                
-                return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(token) });
+                // var token = new JwtSecurityToken
+                // (
+                //     issuer: "", //_configuration["Issuer"], //appsettings.json içerisinde bulunan issuer değeri
+                //     audience: "", //_configuration["Audience"],//appsettings.json içerisinde bulunan audince değeri
+                //     claims: claims,
+                //     expires: DateTime.UtcNow.AddDays(30), // 30 gün geçerli olacak
+                //     notBefore: DateTime.UtcNow,
+                //     signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("")), //_configuration["SigningKey"])),//appsettings.json içerisinde bulunan signingkey değeri
+                //             SecurityAlgorithms.HmacSha256)
+                // );
+                return null;
+                //return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(token) });
             }
             return BadRequest();
         }

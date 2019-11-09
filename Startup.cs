@@ -8,8 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using AutoMapper;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
+// using Microsoft.AspNetCore.Authentication.JwtBearer;
+// using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.IO;
 
@@ -41,20 +41,20 @@ namespace Budalapi
             services.AddScoped<IDistrictRepository, DistrictRepository>();
             services.AddScoped<IDistrictService, DistrictService>();
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(jwtBearerOptions =>
-                {
-                    jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters()
-                    {
-                        ValidateActor = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        ValidIssuer = Configuration["Issuer"],
-                        ValidAudience = Configuration["Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["SigningKey"]))
-                    };
-                });
+            // services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            //     .AddJwtBearer(jwtBearerOptions =>
+            //     {
+            //         jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters()
+            //         {
+            //             ValidateActor = true,
+            //             ValidateAudience = true,
+            //             ValidateLifetime = true,
+            //             ValidateIssuerSigningKey = true,
+            //             ValidIssuer = Configuration["Issuer"],
+            //             ValidAudience = Configuration["Audience"],
+            //             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["SigningKey"]))
+            //         };
+            //     });
 
         }
 
