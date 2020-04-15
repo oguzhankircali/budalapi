@@ -28,7 +28,8 @@ namespace Budalapi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<BudalapiContext>(options => options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.AddMvc(option => option.EnableEndpointRouting = false);
             services.AddAutoMapper(typeof(Startup));
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
